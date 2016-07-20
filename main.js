@@ -24,7 +24,7 @@ var minHarvester = 1;
 var minUpgrader = 2;
 var minUpgrader2 = 1;
 var minBuilder = 1;
-var minBuilder2 = 0;
+var minBuilder2 = 1;
 var minRepairer = 1;
 var minRepairer2 = 1;
 var minMaintainer = 1;
@@ -152,40 +152,40 @@ module.exports.loop = function () {
         newName = Game.spawns.Alpha.createCustomCreep(200, 'harvester');
     }
     else if (miners.length < minMiners && energy >= 600 ) {
-        newName = Game.spawns.Alpha.createCustomCreep(energy, 'miner');
+        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'miner');
     }
     else if (haulers.length < minHaulers && energy >= energyCap) {
-        newName = Game.spawns.Alpha.createCustomCreep(energy, 'hauler');
+        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'hauler');
     }
     else if(harvesters.length < minHarvester && energy >= 600) {
-        newName = Game.spawns.Alpha.createCustomCreep(energy, 'harvester');
+        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'harvester');
     }
     else if (builders2.length < minBuilder2 && energy >= energyCap) {
-        newName = Game.spawns.Alpha.createCustomCreep(energy, 'builder2');
+        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'builder2');
     }
     else if (repairers2.length < minRepairer2 && energy >= energyCap) {
-        newName = Game.spawns.Alpha.createCustomCreep(energy, 'repairer2');
+        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'repairer2');
     }
     else if (upgraders2.length < minUpgrader2 && energy >= energyCap){
-        newName = Game.spawns.Alpha.createCustomCreep(energy, 'upgrader2');
+        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'upgrader2');
     }
     else if (upgraders.length < minUpgrader && energy >= energyCap){
-        newName = Game.spawns.Alpha.createCustomCreep(energy, 'upgrader');
+        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'upgrader');
     }
     else if (claimers.length < minClaimers && energy >= energyCap) {
-        newName = Game.spawns.Alpha.createCustomCreep(energy, 'claimer');
+        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'claimer');
     }
     else if (builders.length < minBuilder && energy >= energyCap) {
-        newName = Game.spawns.Alpha.createCustomCreep(energy, 'builder');
+        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'builder');
     }
     else if (repairers.length < minRepairer && energy >= energyCap) {
-        newName = Game.spawns.Alpha.createCustomCreep(energy, 'repairer');
+        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'repairer');
     }
     else if (maintainers.length < minMaintainer && energy >= energyCap) {
-        newName = Game.spawns.Alpha.createCustomCreep(energy, 'maintainer');
+        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'maintainer');
     }
     else if (melees.length < minMelee && energy >= energyCap) {
-        newName = Game.spawns.Alpha.createCustomCreep(energy, 'melee');
+        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'melee');
     }
 
     // Assign creeps their jobs

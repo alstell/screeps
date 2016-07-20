@@ -6,7 +6,7 @@ var roleRepairer2 = {
     run: function(creep) {
 
         var droppedEnergy = creep.pos.findInRange(FIND_DROPPED_ENERGY, 5 );
-        var flagName = Game.flags.Build;
+        var flagName = Game.flags.New;
 
 
         if (droppedEnergy != undefined && creep.carry.energy < creep.carryCapacity) {

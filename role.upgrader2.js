@@ -10,11 +10,8 @@ var roleUpgrader = {
                 creep.moveTo(droppedEnergy);
             }
         }
-        var flagName = Game.flags.Build;
-
-        if (Game.flags.Build) {
-            var flagName = Game.flags.Build;
-        }
+        var flagName = Game.flags.New;
+        
         // Move to the flag in another room
 
         if (creep.pos.isEqualTo(flagName)) {
