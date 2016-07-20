@@ -1,0 +1,6 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+global.commandname = function() {}
+global.foo = function() {
+    console.log('bar');
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
