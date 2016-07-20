@@ -7,7 +7,7 @@
 //  Functions:  set - sets up the rooms and handler hashes      //
 //              get - returns roomHandler object if the room    //
 //                  belongs to us                               //
-//              isOurRoom - reutrns true is the controller      //
+//              isOurRoom - returns true is the controller      //
 //                  belongs to us, false if not                 //
 //              getRoomHandlers - returns a hash of all the     //
 //                  room handlers                               //

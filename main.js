@@ -43,36 +43,38 @@ var logged = undefined;
 
 module.exports.loop = function () {
 
-/*   // Set up rooms **** New ****
-    for (let roomObj in Game.rooms) {
-        if (Game.rooms.hasOwnProperty(roomObj)) {
-            var roomHandler = new Room(Game.rooms[roomObj], RoomHandler);
-            RoomHandler.set(Game.room[roomObj].name, roomHandler)
+   // Set up rooms **** New ****
+    for (let roomName in Game.rooms) {
+        if (Game.rooms.hasOwnProperty(roomName)) {
+            var roomHandler = new Room(Game.rooms[roomName], RoomHandler);
+            RoomHandler.set(roomName, roomHandler)
         }
     }
-*/
- /*   // Load Room **** New ****
+
+    // Load Room **** New ****
     var rooms = RoomHandler.getRoomHandlers();
-    for (let roomObj in rooms) {
-        if (rooms.hasOwnProperty(roomObj)){
-            let room = rooms[roomObj];
+    for (let roomName in rooms) {
+        if (rooms.hasOwnProperty(roomName)){
+            let room = rooms[roomName];
             // room.loadCreeps();
             // room.populate();
 
-//            console.log( room.room.name + ' | ' +
-//            'goals met: ' + room.population.goalsMet() +
+            console.log( room.room.name + ' | ' +
+            'goals met: ' + room.population.goalsMet() +
             ', population: ' + room.population.getTotalPopulation() +
             ' / ' + room.population.getMaxPopulation()  +
-//            ' (' + room.population.getType('CreepMiner').total +
-//            '/' + room.population.getType('CreepHauler').total +
-//            '/' + room.population.getType('CreepBuilder').total +
-//            '/' + room.population.getType('CreepRepairer').total +
-//            ' ), ' +
-            'next death in ' + room.population.getNextExpectedDeath() +' ticks.'
-            )
+            ' (m:' + room.population.getType('miner').total +
+            '/h:' + room.population.getType('hauler').total +
+            '/b:' + room.population.getType('builder').total +
+            '/r:' + room.population.getType('repairer').total +
+            '/u:' + room.population.getType('upgrader').total +
+            '), ' +
+            ' next death in ' + room.population.getNextExpectedDeath() +' ticks.'
+           )
+
         }
     }
-*/
+
 
     for (let n in mySpawns) {
     var mySpawn = mySpawns[n].name;

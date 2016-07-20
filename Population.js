@@ -28,6 +28,7 @@
 var Cache = require('Cache');
 
 function Population(room) {
+    this.cache = new Cache ();      // Setup room cache
     this.room = room;
     this.population = 0;            // Where is this used?
     this.populationMultiplier = 8;  // Where is this used and for what?
@@ -98,6 +99,10 @@ function Population(room) {
     this.creeps = this.room.find(FIND_MY_CREEPS);
 
     for (let i = 0; i < this.creeps.length; i++) {
+        let creepType = this.creeps[i].memory.role;
+        if (!this.typeDistribution[creepType] ) {
+            this.typeDistribution[creepType] = createTypeDistribution(creepType);
+        }
         this.typeDistribution[this.creeps[i].memory.role].total++;
     }
 
@@ -149,9 +154,8 @@ Population.prototype.getNextExpectedDeath = function() {
 
             for (let i = 0; i < this.creeps.length; i++) {
                 let creep = this.creeps[i];
-
                 if (creep.ticksToLive < ttl) {
-                    ttl = creep.tickToLive;
+                    ttl = creep.ticksToLive;
                 }
             }
             return ttl;
@@ -174,4 +178,15 @@ Population.prototype.getTypes = function() {
 };
 
 module.exports = Population;
+
+// Local Functions
+
+function createTypeDistribution(type) {
+    return {
+        total: 0,
+        goalWeight: 0.1,
+        currentPercent: 0,
+        max: 1
+    }
+}
 
