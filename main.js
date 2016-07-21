@@ -21,16 +21,16 @@ var roleRanger = require('role.ranger');
 
 // Set minimum number of creeps
 var minHarvester = 1;
-var minUpgrader = 2;
+var minUpgrader = 1;
 var minUpgrader2 = 1;
 var minBuilder = 1;
-var minBuilder2 = 1;
+var minBuilder2 = 0;
 var minRepairer = 1;
 var minRepairer2 = 1;
 var minMaintainer = 1;
-var minClaimers = 0;
+var minClaimers = 1;
 var minHaulers = 2;
-var minMelee = 1;
+var minMelee = 0;
 var minRangers = 0;
 var mySpawns = Game.spawns;
 var Sources = Game.spawns.Alpha.room.find(FIND_SOURCES);
@@ -69,6 +69,11 @@ module.exports.loop = function () {
             '/r:' + room.population.getType('repairer').total +
             '/u:' + room.population.getType('upgrader').total +
             '), ' +
+                'Extension: ' + room.eStorage.extensions.length +
+                ', Spawns: ' + room.eStorage.spawns.length +
+                ', Stores: ' + room.eStorage.stores.length +
+                ', Energy: ' + parseInt((room.eStorage.energy() / room.eStorage.energyCapacity() ) *100) + '%, ' +
+
             ' next death in ' + room.population.getNextExpectedDeath() +' ticks.'
            )
 
@@ -150,8 +155,8 @@ module.exports.loop = function () {
     else if (haulers.length == 0) {
         newName = Game.spawns.Alpha.createCustomCreep(200, 'hauler');
     }
-    else if (Game.spawns.Alpha.room.find(FIND_MY_CREEPS).length < 3 && harvesters.length == 0) {
-        newName = Game.spawns.Alpha.createCustomCreep(200, 'harvester');
+    else if (harvesters.length == 0 && energy >= 300 && energy < 600) {
+        newName = Game.spawns.Alpha.createCustomCreep(energy, 'harvester');
     }
     else if (miners.length < minMiners && energy >= 600 ) {
         newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'miner');
@@ -174,8 +179,8 @@ module.exports.loop = function () {
     else if (upgraders.length < minUpgrader && energy >= energyCap){
         newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'upgrader');
     }
-    else if (claimers.length < minClaimers && energy >= energyCap) {
-        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'claimer');
+    else if (claimers.length < minClaimers && energy >= 700) {
+        newName = Game.spawns.Alpha.createCustomCreep(700, 'claimer');
     }
     else if (builders.length < minBuilder && energy >= energyCap) {
         newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'builder');

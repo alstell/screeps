@@ -35,16 +35,18 @@ var roleRepairer2 = {
 
             if(creep.memory.working) {
                 var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                    filter: (s) => s.hits < 0.8 * s.hitsMax &&
-                    (s.structureType != STRUCTURE_WALL || s.structuresType != STRUCTURE_RAMPART)
+                    filter: (s) => (s.hits < 0.8 * s.hitsMax &&
+                    (s.structureType != STRUCTURE_WALL && s.structureType != STRUCTURE_RAMPART))
                 });
 
                 if (target != undefined) {
+                    console.log("REPAIR " + target.structureType);
                     if (creep.repair(target) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(target);
                     }
                 }
                 else {
+                    console.log("Changeing role to Maintainer");
                     roleMaintainer2.run(creep);
                 }
             }
