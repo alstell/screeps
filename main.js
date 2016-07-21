@@ -86,12 +86,13 @@ module.exports.loop = function () {
     });
 
     for (let tower of towers) {
-        var targetEnemy = tower.pos.findClosestByRange(tower.pos.findInRange(FIND_HOSTILE_CREEPS, 12 ));
-        var damagedCreep = tower.pos.findClosestByRange(tower.pos.findInRange(FIND_MY_CREEPS, 12, {
+        var targetEnemy = tower.pos.findClosestByRange(tower.pos.findInRange(FIND_HOSTILE_CREEPS, 15 ));
+        var damagedCreep = tower.pos.findClosestByRange(tower.pos.findInRange(FIND_MY_CREEPS, 15, {
             filter: (c) => c.hits < c.hitsMax
         }));
-        var damagedStruc = tower.pos.findClosestByRange(tower.pos.findInRange(FIND_STRUCTURES, 10, {
-            filter: (s) => (s.hits < s.hitsMax / 2) && (s.structureType != STRUCTURE_RAMPART)
+        var damagedStruc = tower.pos.findClosestByRange(tower.pos.findInRange(FIND_STRUCTURES, 12, {
+            filter: (s) => (s.hits < s.hitsMax * 0.9) &&
+            (s.structureType != STRUCTURE_RAMPART && s.structureType != STRUCTURE_WALL)
         }));
 
         if (targetEnemy != undefined) {
@@ -175,7 +176,7 @@ module.exports.loop = function () {
         newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'upgrader');
     }
     else if (claimers.length < minClaimers && energy >= 700) {
-        newName = Game.spawns.Alpha.createCustomCreep(700, 'claimer');
+        newName = Game.spawns.Alpha.createCustomCreep(energy, 'claimer');
     }
     else if (builders.length < minBuilder && energy >= energyCap) {
         newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'builder');
