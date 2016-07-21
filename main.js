@@ -59,31 +59,26 @@ module.exports.loop = function () {
             // room.loadCreeps();
             // room.populate();
 
-            console.log( room.room.name + ' | ' +
-            'goals met: ' + room.population.goalsMet() +
-            ', population: ' + room.population.getTotalPopulation() +
-            ' / ' + room.population.getMaxPopulation()  +
-            ' (m:' + room.population.getType('miner').total +
-            '/h:' + room.population.getType('hauler').total +
-            '/b:' + room.population.getType('builder').total +
-            '/r:' + room.population.getType('repairer').total +
-            '/u:' + room.population.getType('upgrader').total +
-            '), ' +
-                'Extension: ' + room.eStorage.extensions.length +
-                ', Spawns: ' + room.eStorage.spawns.length +
-                ', Stores: ' + room.eStorage.stores.length +
-                ', Energy: ' + parseInt((room.eStorage.energy() / room.eStorage.energyCapacity() ) *100) + '%, ' +
+                console.log( '['+Game.time+'] ' + room.room.name + ' | ' +
+                    'goals met: ' + room.population.goalsMet() +
+                    ', population: ' + room.population.getTotalPopulation() +
+                    ' / ' + room.population.getMaxPopulation()  +
+                    ' (m:' + room.population.getType('miner').total +
+                    '/h:' + room.population.getType('hauler').total +
+                    '/b:' + room.population.getType('builder').total +
+                    '/r:' + room.population.getType('repairer').total +
+                    '/u:' + room.population.getType('upgrader').total +
+                    '), ' +
+                    'Extension: ' + room.storageManager.extensions.length +
+                    ', Spawns: ' + room.storageManager.spawns.length +
+                    ', Stores: ' + room.storageManager.stores.length +
+                    ', Energy: ' + parseInt((room.storageManager.energy() / room.storageManager.energyCapacity() ) *100) + '%, ' +
 
-            ' next death in ' + room.population.getNextExpectedDeath() +' ticks.'
-           )
-
+                    ' next death in ' + room.population.getNextExpectedDeath() +' ticks.'
+                );
         }
     }
-
-
-    for (let n in mySpawns) {
-    var mySpawn = mySpawns[n].name;
-    }
+    console.log();
 
     // Tower defense - this code needs to move to a module and be generalized!
     var towers = Game.spawns.Alpha.room.find(FIND_MY_STRUCTURES, {
