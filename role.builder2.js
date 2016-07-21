@@ -1,4 +1,5 @@
-var roleRepairer = require('role.repairer');
+var roleHauler = require('role.hauler');
+var roleMiner = require('role.miner');
 
 var roleBuilder2 = {
 
@@ -42,7 +43,7 @@ var roleBuilder2 = {
                     }
                 }
                 else {
-                    roleRepairer.run(creep);
+                        roleHauler.run(creep);
                 }
             }
             else {
