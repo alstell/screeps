@@ -21,9 +21,9 @@ var roleRanger = require('role.ranger');
 
 // Set minimum number of creeps
 var minHarvester = 1;
-var minUpgrader = 1;
+var minUpgrader = 2;
 var minUpgrader2 = 1;
-var minBuilder = 1;
+var minBuilder = 0;
 var minBuilder2 = 1;
 var minRepairer = 1;
 var minRepairer2 = 1;

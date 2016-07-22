@@ -21,6 +21,7 @@
 var Population = require('Population');
 var EnergyStorage = require('eStorage');
 var Resources = require('Resources');
+var Constructions = require('Constructions');
 
 function Room(room, roomHandler) {
     this.room = room;
@@ -31,6 +32,7 @@ function Room(room, roomHandler) {
     this.population = new Population(this.room);
     this.storageManager = new EnergyStorage(this.room);
     this.resourceManager = new Resources(this.room, this.population);
+    this.constructionManager = new Constructions(this.room);
 
     // The number of miners should be determined by the number of open positions around all sources,
     // their bodies might be determined by 5 work/ number of positions rounded up (or it should always be 2)
