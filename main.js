@@ -2,45 +2,6 @@
 var RoomHandler = require('RoomHandler');
 var Room = require('Room');
 
-// Module imports
-require ('prototype.spawn') ();
-
-var roleHarvester = require('role.harvester');
-var roleUpgrader = require('role.upgrader');
-var roleUpgrader2 = require('role.upgrader2');
-var roleBuilder = require('role.builder');
-var roleBuilder2 = require('role.builder2');
-var roleRepairer = require('role.repairer');
-var roleRepairer2 = require('role.repairer2');
-var roleMaintainer = require('role.maintainer');
-var roleClaimer = require('role.claimer');
-var roleMiner = require('role.miner');
-var roleHauler = require('role.hauler');
-var roleMelee = require('role.melee');
-var roleRanger = require('role.ranger');
-
-// Set minimum number of creeps
-var minHarvester = 1;
-var minUpgrader = 2;
-var minUpgrader2 = 1;
-var minBuilder = 0;
-var minBuilder2 = 1;
-var minRepairer = 1;
-var minRepairer2 = 1;
-var minMaintainer = 1;
-var minClaimers = 1;
-var minHaulers = 2;
-var minMelee = 0;
-var minRangers = 0;
-var mySpawns = Game.spawns;
-var Sources = Game.spawns.Alpha.room.find(FIND_SOURCES);
-var minMiners = Sources.length;
-
-// Variable definitions
-var newName = undefined;
-var logged = undefined;
-
-
 module.exports.loop = function () {
 
    // Set up rooms **** New ****
@@ -116,25 +77,6 @@ module.exports.loop = function () {
         }
     }
 
-    // Create an array of each type of creep
-    var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
-    var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
-    var upgraders2 = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader2');
-    var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
-    var builders2 = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder2');
-    var repairers = _.filter(Game.creeps, (creep) => creep.memory.role == 'repairer');
-    var repairers2 = _.filter(Game.creeps, (creep) => creep.memory.role == 'repairer2');
-    var maintainers = _.filter(Game.creeps, (creep) => creep.memory.role == 'maintainer');
-    var claimers = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer');
-    var melees = _.filter(Game.creeps, (creep) => creep.memory.role == 'melee');
-    var rangers = _.filter(Game.creeps, (creep) => creep.memory.role == 'ranger');
-    var miners = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner');
-    var haulers = _.filter(Game.creeps, (creep) => creep.memory.role == 'hauler');
-    var energyCap = Game.spawns.Alpha.room.energyCapacityAvailable;
-    var energy = Game.spawns.Alpha.room.energyAvailable;
-    if (energyCap > 800) energyCap = 800;
-
-
     // Clean memory of dead creeps
     for(let dead in Memory.creeps) {
         if(!Game.creeps[dead]) {
@@ -145,83 +87,6 @@ module.exports.loop = function () {
         }
     }
 
-    if (miners.length == 0) {
-        newName = Game.spawns.Alpha.createCustomCreep(200, 'miner');
-    }
-    else if (haulers.length == 0) {
-        newName = Game.spawns.Alpha.createCustomCreep(200, 'hauler');
-    }
-    else if (harvesters.length == 0 && energy >= 300 && energy < 600) {
-        newName = Game.spawns.Alpha.createCustomCreep(energy, 'harvester');
-    }
-    else if (miners.length < minMiners && energy >= 600 ) {
-        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'miner');
-    }
-    else if (haulers.length < minHaulers && energy >= energyCap) {
-        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'hauler');
-    }
-    else if(harvesters.length < minHarvester && energy >= 600) {
-        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'harvester');
-    }
-    else if (builders2.length < minBuilder2 && energy >= energyCap) {
-        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'builder2');
-    }
-    else if (repairers2.length < minRepairer2 && energy >= energyCap) {
-        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'repairer2');
-    }
-    else if (upgraders2.length < minUpgrader2 && energy >= energyCap){
-        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'upgrader2');
-    }
-    else if (upgraders.length < minUpgrader && energy >= energyCap){
-        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'upgrader');
-    }
-    else if (claimers.length < minClaimers && energy >= 700) {
-        newName = Game.spawns.Alpha.createCustomCreep(energy, 'claimer');
-    }
-    else if (builders.length < minBuilder && energy >= energyCap) {
-        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'builder');
-    }
-    else if (repairers.length < minRepairer && energy >= energyCap) {
-        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'repairer');
-    }
-    else if (maintainers.length < minMaintainer && energy >= energyCap) {
-        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'maintainer');
-    }
-    else if (melees.length < minMelee && energy >= energyCap) {
-        newName = Game.spawns.Alpha.createCustomCreep(energyCap, 'melee');
-    }
-
-    // Assign creeps their jobs
-    for(let name in Game.creeps) {
-        var creep = Game.creeps[name];
-        if(creep.memory.role == 'harvester') {
-            roleHarvester.run(creep);
-        } else if(creep.memory.role == 'upgrader') {
-            roleUpgrader.run(creep);
-        } else if(creep.memory.role == 'upgrader2') {
-            roleUpgrader2.run(creep);
-        } else if(creep.memory.role == 'builder') {
-            roleBuilder.run(creep);
-        } else if(creep.memory.role == 'builder2') {
-            roleBuilder2.run(creep);
-        } else if(creep.memory.role == 'repairer') {
-            roleRepairer.run(creep);
-        } else if(creep.memory.role == 'repairer2') {
-            roleRepairer2.run(creep);
-        } else if(creep.memory.role == 'maintainer') {
-            roleMaintainer.run(creep);
-        } else if(creep.memory.role == 'claimer') {
-            roleClaimer.run(creep);
-        } else if(creep.memory.role == 'melee') {
-            roleMelee.run(creep);
-        } else if(creep.memory.role == 'ranger') {
-            roleMelee.run(creep);
-        }else if(creep.memory.role == "miner") {
-            roleMiner.run(creep);
-        }else if(creep.memory.role == "hauler") {
-            roleHauler.run(creep);
-        }
-    }
     function logCreeps () {
         console.log('Miners: ' + miners.length + ' Haulers: ' + haulers.length + ' Harvesters: ' + harvesters.length +
             ' Upgraders: ' + upgraders.length + ' Claimers: ' + claimers.length + ' Builders: ' + builders.length +
