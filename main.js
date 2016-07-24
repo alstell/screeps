@@ -127,7 +127,7 @@ module.exports.loop = function () {
             var builders = _.filter(myCreeps, (creep) => creep.memory.role == 'builder');
             var repairers = _.filter(myCreeps, (creep) => creep.memory.role == 'repairer');
             var maintainers = _.filter(myCreeps, (creep) => creep.memory.role == 'maintainer');
-            var claimers = _.filter(myCreeps, (creep) => creep.memory.role == 'claimer');
+            var claimers = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer');
             var melees = _.filter(myCreeps, (creep) => creep.memory.role == 'melee');
             var rangers = _.filter(myCreeps, (creep) => creep.memory.role == 'ranger');
             var miners = _.filter(myCreeps, (creep) => creep.memory.role == 'miner');
