@@ -2,7 +2,7 @@
 
 module.exports = function() {
     StructureSpawn.prototype.createCustomCreep =
-        function (energy, roleName) {
+        function (energy, roleName, room) {
             var body = [];
             var cName = _.capitalize(roleName) + '_' + _.padLeft(new Date().getMinutes(), 2, '0');
 
@@ -23,8 +23,8 @@ module.exports = function() {
                 return this.createCreep(body, cName, {role: roleName, flagged: false});
             }
             else if (roleName == 'miner'){
-                var sources = Game.spawns.Alpha.room.find(FIND_SOURCES);
-                var miners = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner');
+                var sources = Game.spawns[room].room.find(FIND_SOURCES);
+                var miners = _.filter(Game.spawns[room].room.find(FIND_MY_CREEPS), (creep) => creep.memory.role == 'miner');
                 var id = findUniqueSource(sources, miners);
 
                 if (energy == 200){
@@ -32,12 +32,12 @@ module.exports = function() {
                 }
                 else { body = [WORK,WORK,WORK,WORK,WORK,MOVE,MOVE];
                 }
-                console.log ('Spawning new ' + roleName + ' creep: ' + cName);
+                console.log (room +': Spawning new ' + roleName + ' creep: ' + cName);
                 return this.createCreep(body, cName, {role: roleName, assignedSource: id});
                 }
 
             else if (roleName == 'melee'){
-                var numParts = Math.floor(energy/140);
+                let numParts = Math.floor(energy/140);
                 for (let i = 0; i < numParts; i++) {
                     body.push(TOUGH)
                 }
@@ -45,12 +45,12 @@ module.exports = function() {
                     body.push(ATTACK);
                     body.push(MOVE);
                 }
-                console.log ('Spawning new ' + roleName + ' creep: ' + cName);
+                console.log (room +':Spawning new ' + roleName + ' creep: ' + cName);
                 return this.createCreep(body, cName, {role: roleName, flagged: false});
             }
 
             else if (roleName == 'ranger'){
-                var numParts = Math.floor(energy/210);
+                let numParts = Math.floor(energy/210);
                 for (let i = 0; i < numParts; i++) {
                     body.push(TOUGH)
                 }
@@ -58,7 +58,7 @@ module.exports = function() {
                     body.push(RANGED_ATTACK);
                     body.push(MOVE);
                 }
-                console.log ('Spawning new ' + roleName + ' creep: ' + cName);
+                console.log (room +':Spawning new ' + roleName + ' creep: ' + cName);
                 return this.createCreep(body, cName, {role: roleName, flagged: false});
             }
 
@@ -73,7 +73,7 @@ module.exports = function() {
                 for (let i = 0; i < numParts; i++) {
                     body.push(MOVE);
                 }
-                console.log ('Spawning new ' + roleName + ' creep: ' + cName);
+                console.log (room +':Spawning new ' + roleName + ' creep: ' + cName);
                 return this.createCreep(body, cName, {role: roleName, working: false});
             }
         }
@@ -81,7 +81,7 @@ module.exports = function() {
 
 function findUniqueSource (sources, miners) {
     if (miners == undefined) {
-        return Game.spawns.Alpha.pos.findClosestByPath(FIND_SOURCES).id
+        return spawnGame.spawns[room].room.pos.findClosestByPath(FIND_SOURCES).id
     }
     for (var source of sources) {
         for (let miner of miners) {

@@ -1,4 +1,4 @@
-var roleHauler = require('role.hauler');
+var roleUpgrader = require('role.upgrader');
 
 var roleHarvester = {
 
@@ -28,7 +28,7 @@ var roleHarvester = {
         }
         });
             if (!target) {
-                    roleHauler.run(creep);
+                    roleUpgrader.run(creep);
                 }
             else if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(target);

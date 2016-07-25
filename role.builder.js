@@ -7,10 +7,6 @@ var roleBuilder = {
 
         var droppedEnergy = creep.pos.findInRange(FIND_DROPPED_ENERGY, 5 );
 
-        if (Game.flags.Build) {
-            var flagName = Game.flags.Build;
-        }
-
         if (droppedEnergy != undefined && creep.carry.energy < creep.carryCapacity) {
             if (creep.pickup(droppedEnergy) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(droppedEnergy);
@@ -29,7 +25,6 @@ var roleBuilder = {
             var lowRamp = creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: (structure) => {
                 return (structure.structureType == STRUCTURE_RAMPART && structure.hits < 10000)}
             });
-
 
             if (target != undefined) {
                 if (creep.build(target) == ERR_NOT_IN_RANGE) {
