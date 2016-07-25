@@ -38,19 +38,5 @@ function Room(room, roomHandler) {
     this.population.typeDistribution.miner.max = 2;
 
     // This number really should be determined by the length of the path from the source to the spawn.
-    this.population.typeDistribution.hauler.max =  this.population.typeDistribution.miner.max * 2;
-
-
- //   var newName = BodyBuilder(room, 'miner', 800);
- //   console.log (newName);
-}
-
-module.exports = Room;
-
-function BodyBuilder(room, roleName, energy) {
-    var body = [];
-    var cName = _.capitalize(roleName) + '_' + _.padLeft(new Date().getMinutes(), 2, '0');
-    availableEnergy = energy;
-
-    console.log(room.name + ': '+ cName + ' - ' + availableEnergy + ' E.U.');
+    this.population.typeDistribution.hauler.max = this.population.typeDistribution.miner.max * 2;
 }

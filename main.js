@@ -1,6 +1,6 @@
 //New module imports
-var RoomHandler = require('RoomHandler');
-var Room = require('Room');
+// var RoomHandler = require('RoomHandler');
+// var Room = require('Room');
 
 // Module imports
 require ('prototype.spawn') ();
@@ -8,13 +8,14 @@ require ('prototype.spawn') ();
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
+var roleBuilder2 = require('role.builder2');
 var roleRepairer = require('role.repairer');
 var roleMaintainer = require('role.maintainer');
 var roleClaimer = require('role.claimer');
 var roleMiner = require('role.miner');
 var roleHauler = require('role.hauler');
-var roleMelee = require('role.melee');
-var roleRanger = require('role.ranger');
+// var roleMelee = require('role.melee');
+// var roleRanger = require('role.ranger');
 
 
 
@@ -26,7 +27,7 @@ var mySpawns = Game.spawns;
 
 module.exports.loop = function () {
 
-   // Set up rooms **** New ****
+/*   // Set up rooms **** New ****
     for (let roomName in Game.rooms) {
         if (Game.rooms.hasOwnProperty(roomName)) {
             var roomHandler = new Room(Game.rooms[roomName], RoomHandler);
@@ -53,7 +54,7 @@ module.exports.loop = function () {
 
         }
     }
-
+*/
     // Clean memory of dead creeps
     for(let dead in Memory.creeps) {
         if(!Game.creeps[dead]) {
@@ -84,6 +85,7 @@ module.exports.loop = function () {
             var minHarvester = 1;
             var minUpgrader = 1;
             var minBuilder = 1;
+            var minBuilder2 = 1;
             var minRepairer = 1;
             var minMaintainer = 1;
             var minClaimers = 1;
@@ -125,6 +127,7 @@ module.exports.loop = function () {
             var harvesters =  _.filter(myCreeps, (creep) => creep.memory.role == 'harvester');
             var upgraders = _.filter(myCreeps, (creep) => creep.memory.role == 'upgrader');
             var builders = _.filter(myCreeps, (creep) => creep.memory.role == 'builder');
+            var builders2 = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder2');
             var repairers = _.filter(myCreeps, (creep) => creep.memory.role == 'repairer');
             var maintainers = _.filter(myCreeps, (creep) => creep.memory.role == 'maintainer');
             var claimers = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer');
@@ -165,6 +168,9 @@ module.exports.loop = function () {
             else if (claimers.length < minClaimers && energy >= 700 && roomSpawn == 'Alpha') {
                 newName = Game.spawns[roomSpawn].createCustomCreep(energy, 'claimer',roomSpawn);
             }
+            else if (builders2.length < minBuilder2 && energy >= energyCap && roomSpawn == 'Alpha') {
+                newName = Game.spawns[roomSpawn].createCustomCreep(energy, 'builder2',roomSpawn);
+            }
             else if (builders.length < minBuilder && energy >= energyCap) {
                 newName = Game.spawns[roomSpawn].createCustomCreep(energyCap, 'builder',roomSpawn);
             }
@@ -189,6 +195,8 @@ module.exports.loop = function () {
             roleUpgrader.run(creep);
         } else if(creep.memory.role == 'builder') {
             roleBuilder.run(creep);
+        } else if(creep.memory.role == 'builder2') {
+            roleBuilder2.run(creep);
         } else if(creep.memory.role == 'repairer') {
             roleRepairer.run(creep);
         } else if(creep.memory.role == 'maintainer') {
