@@ -1,4 +1,4 @@
-var roleHauler = require('role.repairer');
+var roleRepairer = require('role.repairer');
 
 var roleBuilder2 = {
 
