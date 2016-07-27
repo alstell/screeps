@@ -14,7 +14,7 @@ var roleMaintainer = require('role.maintainer');
 var roleClaimer = require('role.claimer');
 var roleMiner = require('role.miner');
 var roleHauler = require('role.hauler');
-// var roleMelee = require('role.melee');
+var roleMelee = require('role.melee');
 // var roleRanger = require('role.ranger');
 
 
@@ -89,7 +89,7 @@ module.exports.loop = function () {
             var minRepairer = 1;
             var minMaintainer = 1;
             var minClaimers = 1;
-            var minMelee = 0;
+            var minMelee = 2;
             var minRangers = 0;
 
             var Sources = Game.spawns[roomSpawn].room.find(FIND_SOURCES);
@@ -102,11 +102,11 @@ module.exports.loop = function () {
             });
 
             for (let tower of towers) {
-                var targetEnemy = tower.pos.findClosestByRange(tower.pos.findInRange(FIND_HOSTILE_CREEPS, 15));
+                var targetEnemy = tower.pos.findClosestByRange(tower.pos.findInRange(FIND_HOSTILE_CREEPS, 35));
                 var damagedCreep = tower.pos.findClosestByRange(tower.pos.findInRange(FIND_MY_CREEPS, 15, {
                     filter: (c) => c.hits < c.hitsMax
                 }));
-                var damagedStruc = tower.pos.findClosestByRange(tower.pos.findInRange(FIND_STRUCTURES, 12, {
+                var damagedStruc = tower.pos.findClosestByRange(tower.pos.findInRange(FIND_STRUCTURES, 30, {
                     filter: (s) => (s.hits < s.hitsMax * 0.9) &&
                     (s.structureType != STRUCTURE_RAMPART && s.structureType != STRUCTURE_WALL)
                 }));
@@ -131,7 +131,7 @@ module.exports.loop = function () {
             var repairers = _.filter(myCreeps, (creep) => creep.memory.role == 'repairer');
             var maintainers = _.filter(myCreeps, (creep) => creep.memory.role == 'maintainer');
             var claimers = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer');
-            var melees = _.filter(myCreeps, (creep) => creep.memory.role == 'melee');
+            var melees = _.filter(Game.creeps, (creep) => creep.memory.role == 'melee');
             var rangers = _.filter(myCreeps, (creep) => creep.memory.role == 'ranger');
             var miners = _.filter(myCreeps, (creep) => creep.memory.role == 'miner');
             var haulers = _.filter(myCreeps, (creep) => creep.memory.role == 'hauler');
@@ -206,7 +206,7 @@ module.exports.loop = function () {
         } else if(creep.memory.role == 'melee') {
             roleMelee.run(creep);
         } else if(creep.memory.role == 'ranger') {
-            roleMelee.run(creep);
+            roleRanger.run(creep);
         }else if(creep.memory.role == "miner") {
             roleMiner.run(creep);
         }else if(creep.memory.role == "hauler") {
