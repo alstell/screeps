@@ -12,6 +12,7 @@ var roleBuilder2 = require('role.builder2');
 var roleRepairer = require('role.repairer');
 var roleMaintainer = require('role.maintainer');
 var roleClaimer = require('role.claimer');
+var roleClaimer2 = require('role.claimer2');
 var roleMiner = require('role.miner');
 var roleHauler = require('role.hauler');
 var roleMelee = require('role.melee');
@@ -86,9 +87,10 @@ module.exports.loop = function () {
             var minUpgrader = 1;
             var minBuilder = 1;
             var minBuilder2 = 1;
-            var minRepairer = 1;
+            var minRepairer = 0;
             var minMaintainer = 1;
             var minClaimers = 1;
+            var minClaimers2 = 2;
             var minMelee = 2;
             var minRangers = 0;
 
@@ -131,6 +133,7 @@ module.exports.loop = function () {
             var repairers = _.filter(myCreeps, (creep) => creep.memory.role == 'repairer');
             var maintainers = _.filter(myCreeps, (creep) => creep.memory.role == 'maintainer');
             var claimers = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer');
+            var claimers2 = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer2');
             var melees = _.filter(Game.creeps, (creep) => creep.memory.role == 'melee');
             var rangers = _.filter(myCreeps, (creep) => creep.memory.role == 'ranger');
             var miners = _.filter(myCreeps, (creep) => creep.memory.role == 'miner');
@@ -168,6 +171,9 @@ module.exports.loop = function () {
             else if (claimers.length < minClaimers && energy >= 700 && roomSpawn == 'Alpha') {
                 newName = Game.spawns[roomSpawn].createCustomCreep(energy, 'claimer',roomSpawn);
             }
+            else if (claimers2.length < minClaimers2 && energy >= 700 && roomSpawn == 'Beta') {
+                newName = Game.spawns[roomSpawn].createCustomCreep(energy, 'claimer2',roomSpawn);
+            }
             else if (builders2.length < minBuilder2 && energy >= energyCap && roomSpawn == 'Alpha') {
                 newName = Game.spawns[roomSpawn].createCustomCreep(energy, 'builder2',roomSpawn);
             }
@@ -203,6 +209,8 @@ module.exports.loop = function () {
             roleMaintainer.run(creep);
         } else if(creep.memory.role == 'claimer') {
             roleClaimer.run(creep);
+        } else if(creep.memory.role == 'claimer2') {
+            roleClaimer2.run(creep);
         } else if(creep.memory.role == 'melee') {
             roleMelee.run(creep);
         } else if(creep.memory.role == 'ranger') {

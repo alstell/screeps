@@ -1,4 +1,4 @@
-var roleUpgrader = require('role.upgrader');
+var roleRepairer = require('role.repairer');
 
 var roleBuilder = {
 
@@ -39,7 +39,7 @@ var roleBuilder = {
             }
                 
             else {
-                roleUpgrader.run(creep);
+                roleRepairer.run(creep);
             }
         }
         else {

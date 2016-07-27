@@ -8,7 +8,7 @@ module.exports = function() {
 
 
 
-            if (roleName == 'claimer') {
+            if (roleName == 'claimer' || roleName == 'claimer2') {
                 var numClaim = Math.floor((energy - 100) / 600);
                 var numMove = Math.floor((energy - numClaim * 600) / 50);
 
