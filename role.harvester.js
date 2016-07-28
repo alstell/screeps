@@ -1,5 +1,3 @@
-var roleUpgrader = require('role.upgrader');
-
 var roleHarvester = {
 
     /** @param {Creep} creep **/
@@ -21,16 +19,21 @@ var roleHarvester = {
         }
 
         if (creep.memory.working) {
-            var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+            let target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                         filter: (structure) => {
                         return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN ||
                             structure.structureType == STRUCTURE_TOWER) && structure.energy < structure.energyCapacity;
         }
         });
             if (!target) {
-                    roleUpgrader.run(creep);
+                target = creep.pos.findClosestByPath(FIND_MY_CREEPS, {
+                    filter: (c) => {
+                        return (_.sum(c.carry) < c.carryCapacity && c != creep && c.memory.role != 'hauler')
                 }
-            else if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                });
+            }
+            
+            if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(target);
             }
         }
@@ -42,6 +45,12 @@ var roleHarvester = {
                 }
             });
             if(creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                if (creep.carry.energy > 0) {
+                    let target = creep.pos.findInRange(FIND_MY_STRUCTURES, 1, {
+                        filter: (s) => (s).structureType == STRUCTURE_EXTENSION
+                    });
+                    if(target.length > 0) creep.transfer(target[0], RESOURCE_ENERGY);
+                }
                 creep.moveTo(source);
             }
         }

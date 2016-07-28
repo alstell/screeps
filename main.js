@@ -1,7 +1,3 @@
-//New module imports
-// var RoomHandler = require('RoomHandler');
-// var Room = require('Room');
-
 // Module imports
 require ('prototype.spawn') ();
 
@@ -28,34 +24,6 @@ var mySpawns = Game.spawns;
 
 module.exports.loop = function () {
 
-/*   // Set up rooms **** New ****
-    for (let roomName in Game.rooms) {
-        if (Game.rooms.hasOwnProperty(roomName)) {
-            var roomHandler = new Room(Game.rooms[roomName], RoomHandler);
-            RoomHandler.set(roomName, roomHandler)
-        }
-    }
-
-    // Load Room **** New ****
-    var rooms = RoomHandler.getRoomHandlers();
-    for (let roomName in rooms) {
-        if (rooms.hasOwnProperty(roomName)){
-            let room = rooms[roomName];
-            // room.loadCreeps();
-            // room.populate();
-
-                console.log(room.room.name + ' |' +
-                    ' Extension: ' + room.storageManager.extensions.length +
-                    ', Spawns: ' + room.storageManager.spawns.length +
-                    ', Stores: ' + room.storageManager.stores.length +
-                    ', Energy: ' + parseInt((room.storageManager.energy() / room.storageManager.energyCapacity() ) *100) + '%, ' +
-
-                    ' next death in ' + room.population.getNextExpectedDeath() +' ticks.'
-                );
-
-        }
-    }
-*/
     // Clean memory of dead creeps
     for(let dead in Memory.creeps) {
         if(!Game.creeps[dead]) {
@@ -76,7 +44,7 @@ module.exports.loop = function () {
         }
     }
 
-    console.log();
+//    console.log();
 
     for (let roomSpawn in mySpawns) {
         if (mySpawns.hasOwnProperty(roomSpawn)) {
@@ -90,7 +58,7 @@ module.exports.loop = function () {
             var minRepairer = 0;
             var minMaintainer = 1;
             var minClaimers = 1;
-            var minClaimers2 = 2;
+            var minClaimers2 = 1;
             var minMelee = 2;
             var minRangers = 0;
 
@@ -142,21 +110,21 @@ module.exports.loop = function () {
             var energy = Game.spawns[roomSpawn].room.energyAvailable;
             if (energyCap > 800) energyCap = 800;
 
-            console.log ('Number of creeps in ' + room + ': ' + myCreeps.length + '(M:' + miners.length + ' H:' + haulers.length +
+ /*           console.log ('Number of creeps in ' + room + ': ' + myCreeps.length + '(M:' + miners.length + ' H:' + haulers.length +
                 ' Hv:' + harvesters.length + ' U:' + upgraders.length +
                 ' B: ' + builders.length + ' R:' + repairers.length +
                 ' Mt:' + maintainers.length + ')');
-
-            if (miners.length == 0 && energy < 300) {
-                newName = Game.spawns[roomSpawn].createCustomCreep(200, 'miner', roomSpawn);
+*/
+            if (miners.length == 0 && energy < 300 && energy >= 150) {
+                newName = Game.spawns[roomSpawn].createCustomCreep(150, 'miner', roomSpawn);
             }
-            else if (haulers.length == 0 && energy < 300) {
+            else if (haulers.length == 0 && energy < 300&& energy >= 200) {
                 newName = Game.spawns[roomSpawn].createCustomCreep(200, 'hauler',roomSpawn);
             }
             else if (harvesters.length == 0 && energy >= 300 && energy < 600) {
                 newName = Game.spawns[roomSpawn].createCustomCreep(energy, 'harvester',roomSpawn);
             }
-            else if (miners.length < minMiners && energy >= 600) {
+            else if (miners.length < minMiners && energy >= 650) {
                 newName = Game.spawns[roomSpawn].createCustomCreep(energyCap, 'miner',roomSpawn);
             }
             else if (haulers.length < minHaulers && energy >= energyCap) {
@@ -171,7 +139,7 @@ module.exports.loop = function () {
             else if (claimers.length < minClaimers && energy >= 700 && roomSpawn == 'Alpha') {
                 newName = Game.spawns[roomSpawn].createCustomCreep(energy, 'claimer',roomSpawn);
             }
-            else if (claimers2.length < minClaimers2 && energy >= 700 && roomSpawn == 'Beta') {
+            else if (claimers2.length < minClaimers2 && energy >= 700 && roomSpawn == 'Alpha') {
                 newName = Game.spawns[roomSpawn].createCustomCreep(energy, 'claimer2',roomSpawn);
             }
             else if (builders2.length < minBuilder2 && energy >= energyCap && roomSpawn == 'Alpha') {

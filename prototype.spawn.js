@@ -18,8 +18,7 @@ module.exports = function() {
                 for (let i = 0; i < numMove; i++) {
                     body.push(MOVE);
                 }
-                console.log ('Spawning new ' + roleName + ' creep: ' + cName);
-                console.log ('Energy: ' + energy);
+                console.log (room +': Spawning new ' + roleName + ' creep: ' + cName);
                 return this.createCreep(body, cName, {role: roleName, flagged: false});
             }
             else if (roleName == 'miner'){
@@ -27,10 +26,10 @@ module.exports = function() {
                 var miners = _.filter(Game.spawns[room].room.find(FIND_MY_CREEPS), (creep) => creep.memory.role == 'miner');
                 var id = findUniqueSource(sources, miners);
 
-                if (energy == 200){
-                    body = [WORK, MOVE,MOVE];
+                if (energy == 150){
+                    body = [WORK, MOVE];
                 }
-                else { body = [WORK,WORK,WORK,WORK,WORK,MOVE,MOVE];
+                else { body = [WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE];
                 }
                 console.log (room +': Spawning new ' + roleName + ' creep: ' + cName);
                 return this.createCreep(body, cName, {role: roleName, assignedSource: id});
@@ -58,6 +57,18 @@ module.exports = function() {
                     body.push(RANGED_ATTACK);
                     body.push(MOVE);
                 }
+                console.log (room +':Spawning new ' + roleName + ' creep: ' + cName);
+                return this.createCreep(body, cName, {role: roleName, flagged: false});
+            }
+
+            else if (roleName == 'harvester' || roleName == 'hauler'){
+                let numParts = Math.floor(energy/150);
+                for (let i = 0; i < numParts; i++) {
+                    body.push(CARRY);
+                    body.push(CARRY);
+                    body.push(MOVE);
+                }
+
                 console.log (room +':Spawning new ' + roleName + ' creep: ' + cName);
                 return this.createCreep(body, cName, {role: roleName, flagged: false});
             }

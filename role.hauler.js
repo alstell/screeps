@@ -19,20 +19,28 @@ roleHauler = {
         }
 
         if (creep.memory.working) {
-            var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_STORAGE ||
-                    (structure.structureType == STRUCTURE_LINK && structure.energy < structure.energyCapacity));
+            let target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+                filter: (s) => {
+                    return (s.structureType == STRUCTURE_SPAWN && s.energy < s.energyCapacity);
                 }
             });
-            if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+             if (!target) {
+                  target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                     filter: (structure) => {
+                         return (structure.structureType == STRUCTURE_STORAGE ||
+                         (structure.structureType == STRUCTURE_LINK && structure.energy < structure.energyCapacity));
+                     }
+                 });
+             }
+
+             if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(target);
             }
         }
         else {
             var source = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: (structure) => {return structure.structureType == STRUCTURE_CONTAINER
-                    && structure.store[RESOURCE_ENERGY]  > creep.carryCapacity
+                    && structure.store[RESOURCE_ENERGY]  > creep.carryCapacity * .6
                 }
             });
 
