@@ -48,6 +48,18 @@ module.exports = function() {
                 return this.createCreep(body, cName, {role: roleName, flagged: false});
             }
 
+            else if (roleName == 'blocker'){
+                let numParts = Math.floor(energy/70);
+                for (let i = 0; i < 2 * numParts; i++) {
+                    body.push(TOUGH)
+                }
+                for (let i = 0; i < numParts; i++) {
+                    body.push(MOVE);
+                }
+                console.log (room +':Spawning new ' + roleName + ' creep: ' + cName);
+                return this.createCreep(body, cName, {role: roleName, flagged: false});
+            }
+
             else if (roleName == 'ranger'){
                 let numParts = Math.floor(energy/210);
                 for (let i = 0; i < numParts; i++) {
@@ -70,7 +82,7 @@ module.exports = function() {
                 }
 
                 console.log (room +':Spawning new ' + roleName + ' creep: ' + cName);
-                return this.createCreep(body, cName, {role: roleName, flagged: false});
+                return this.createCreep(body, cName, {role: roleName, working: false});
             }
 
             else {

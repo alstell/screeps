@@ -12,6 +12,7 @@ var roleClaimer2 = require('role.claimer2');
 var roleMiner = require('role.miner');
 var roleHauler = require('role.hauler');
 var roleMelee = require('role.melee');
+var roleBlocker = require('role.blocker');
 // var roleRanger = require('role.ranger');
 
 
@@ -34,37 +35,50 @@ module.exports.loop = function () {
         }
     }
 
-    // Fire off From Link
-    var myFromLink = Game.spawns.Alpha.room.lookForAt('structure', 21, 26)[0];
-    var myToLink = Game.spawns.Alpha.room.lookForAt('structure', 8, 15)[0];
-    if (myFromLink && myToLink){
-        if ((myFromLink.cooldown == 0) && (myToLink.energy <= 0) && (myFromLink.energy == myFromLink.energyCapacity)) {
-            console.log("TRANSFERING ENERGY VIA LINK");
-            myFromLink.transferEnergy(myToLink);
-        }
-    }
-
 //    console.log();
-
     for (let roomSpawn in mySpawns) {
         if (mySpawns.hasOwnProperty(roomSpawn)) {
 
-            let room = Game.spawns[roomSpawn].room.name;
+            let room = Game.spawns[roomSpawn].room;
+
             // Set minimum number of creeps
             var minHarvester = 1;
-            var minUpgrader = 1;
+            var minUpgrader = 2;
             var minBuilder = 1;
             var minBuilder2 = 1;
             var minRepairer = 0;
             var minMaintainer = 1;
             var minClaimers = 1;
             var minClaimers2 = 1;
-            var minMelee = 2;
+            var minMelee = 0;
+            var minBlockers = 0;
             var minRangers = 0;
 
             var Sources = Game.spawns[roomSpawn].room.find(FIND_SOURCES);
             var minMiners = Sources.length;
             var minHaulers = 1 * minMiners;
+
+            // Link Code
+            let fromLinks = [];
+            let toLink = undefined;
+            let Links = Game.spawns[roomSpawn].room.find(FIND_MY_STRUCTURES, {
+                filter: {structureType: STRUCTURE_LINK}
+            });
+
+            for (let i = 0; i < Links.length; i++){
+                if (Links[i].pos.inRangeTo(room.controller, 5)) toLink = Links[i];
+                else fromLinks.push(Links[i]);
+            }
+
+            for (let i = 0; i < fromLinks.length; i++){
+                let myFromLink = fromLinks[i];
+                if ((myFromLink.cooldown == 0) && (toLink.energy <= 0) && (myFromLink.energy == myFromLink.energyCapacity)) {
+                    console.log("TRANSFERRING ENERGY VIA LINK IN ROOM " + room.name);
+                    myFromLink.transferEnergy(toLink);
+                }
+
+            }
+
 
             // Tower defense - this code needs to move to a module and be generalized!
             var towers = Game.spawns[roomSpawn].room.find(FIND_MY_STRUCTURES, {
@@ -103,6 +117,7 @@ module.exports.loop = function () {
             var claimers = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer');
             var claimers2 = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer2');
             var melees = _.filter(Game.creeps, (creep) => creep.memory.role == 'melee');
+            var blockers = _.filter(Game.creeps, (creep) => creep.memory.role == 'blocker');
             var rangers = _.filter(myCreeps, (creep) => creep.memory.role == 'ranger');
             var miners = _.filter(myCreeps, (creep) => creep.memory.role == 'miner');
             var haulers = _.filter(myCreeps, (creep) => creep.memory.role == 'hauler');
@@ -154,6 +169,9 @@ module.exports.loop = function () {
             else if (maintainers.length < minMaintainer && energy >= energyCap) {
                 newName = Game.spawns[roomSpawn].createCustomCreep(energyCap, 'maintainer',roomSpawn);
             }
+            else if (blockers.length < minBlockers && energy >= 1050) {
+                newName = Game.spawns[roomSpawn].createCustomCreep(1050, 'blocker', roomSpawn);
+            }
             else if (melees.length < minMelee && energy >= energyCap) {
                 newName = Game.spawns[roomSpawn].createCustomCreep(energyCap, 'melee',roomSpawn);
             }
@@ -181,6 +199,8 @@ module.exports.loop = function () {
             roleClaimer2.run(creep);
         } else if(creep.memory.role == 'melee') {
             roleMelee.run(creep);
+        } else if(creep.memory.role == 'blocker') {
+            roleBlocker.run(creep);
         } else if(creep.memory.role == 'ranger') {
             roleRanger.run(creep);
         }else if(creep.memory.role == "miner") {
@@ -188,11 +208,6 @@ module.exports.loop = function () {
         }else if(creep.memory.role == "hauler") {
             roleHauler.run(creep);
         }
-    }
-    function logCreeps () {
-        console.log('Miners: ' + miners.length + ' Haulers: ' + haulers.length + ' Harvesters: ' + harvesters.length +
-            ' Upgraders: ' + upgraders.length + ' Claimers: ' + claimers.length + ' Builders: ' + builders.length +
-            ' Repairers: ' + repairers.length + ' Maintainers: ' + maintainers.length);
     }
 };
 

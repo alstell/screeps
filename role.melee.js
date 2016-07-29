@@ -25,18 +25,17 @@ var roleMelee = {
                 filter: (s) => s.structureType == STRUCTURE_TOWER
             });
 
+            if (!target) target = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+
             if (!target) target = creep.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, {
                 filter: (s) => s.structureType == STRUCTURE_SPAWN
             });
-
-            if (!target) target = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
 
             if (!target) target = creep.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, {
                 filter: (s) => s.structureType != STRUCTURE_CONTROLLER
             });
 
             if (target) {
-                console.log(target);
                 if (creep.attack(target) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target);
                 }
