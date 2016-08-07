@@ -1,14 +1,21 @@
 
 
 module.exports = function() {
+    StructureSpawn.prototype.createMiner =
+        function (sourceID){
+            let creepName = 'Miner_' + _.padLeft(new Date().getMinutes(), 2, '0');
+            let creepBody = [MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK];
+            return this.createCreep(creepBody, creepName, {role: 'miner', assignedSource: sourceID});
+        };
+
     StructureSpawn.prototype.createCustomCreep =
-        function (energy, roleName) {
+        function (energy, roleName, room) {
             var body = [];
             var cName = _.capitalize(roleName) + '_' + _.padLeft(new Date().getMinutes(), 2, '0');
 
 
 
-            if (roleName == 'claimer') {
+            if (roleName == 'claimer' || roleName == 'claimer2') {
                 var numClaim = Math.floor((energy - 100) / 600);
                 var numMove = Math.floor((energy - numClaim * 600) / 50);
 
@@ -18,26 +25,25 @@ module.exports = function() {
                 for (let i = 0; i < numMove; i++) {
                     body.push(MOVE);
                 }
-                console.log ('Spawning new ' + roleName + ' creep: ' + cName);
-                console.log ('Energy: ' + energy);
+                console.log (room +': Spawning new ' + roleName + ' creep: ' + cName);
                 return this.createCreep(body, cName, {role: roleName, flagged: false});
             }
             else if (roleName == 'miner'){
-                var sources = Game.spawns.Alpha.room.find(FIND_SOURCES);
-                var miners = _.filter(Game.creeps, (creep) => creep.memory.role == 'miner');
+                var sources = room.find(FIND_SOURCES);
+                var miners = _.filter(room.find(FIND_MY_CREEPS), (creep) => creep.memory.role == 'miner');
                 var id = findUniqueSource(sources, miners);
 
-                if (energy == 200){
-                    body = [WORK, MOVE,MOVE];
+                if (energy == 150){
+                    body = [WORK, MOVE];
                 }
-                else { body = [WORK,WORK,WORK,WORK,WORK,MOVE,MOVE];
+                else { body = [WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE];
                 }
-                console.log ('Spawning new ' + roleName + ' creep: ' + cName);
+                console.log (this.name +': Spawning new ' + roleName + ' creep: ' + cName);
                 return this.createCreep(body, cName, {role: roleName, assignedSource: id});
                 }
 
             else if (roleName == 'melee'){
-                var numParts = Math.floor(energy/140);
+                let numParts = Math.floor(energy/140);
                 for (let i = 0; i < numParts; i++) {
                     body.push(TOUGH)
                 }
@@ -45,12 +51,27 @@ module.exports = function() {
                     body.push(ATTACK);
                     body.push(MOVE);
                 }
-                console.log ('Spawning new ' + roleName + ' creep: ' + cName);
+                console.log (room +':Spawning new ' + roleName + ' creep: ' + cName);
+                return this.createCreep(body, cName, {role: roleName, flagged: false});
+            }
+
+            else if (roleName == 'blocker'){
+                let numParts = Math.floor(energy/1070);
+                for (let i = 0; i < 7 * numParts; i++) {
+                    body.push(TOUGH)
+                }
+                for (let i = 0; i < 5 * numParts; i++) {
+                    body.push(MOVE);
+                }
+                for (let i = 0; i < 3 * numParts; i++) {
+                    body.push(HEAL)
+                }
+                console.log (room +':Spawning new ' + roleName + ' creep: ' + cName);
                 return this.createCreep(body, cName, {role: roleName, flagged: false});
             }
 
             else if (roleName == 'ranger'){
-                var numParts = Math.floor(energy/210);
+                let numParts = Math.floor(energy/210);
                 for (let i = 0; i < numParts; i++) {
                     body.push(TOUGH)
                 }
@@ -58,8 +79,20 @@ module.exports = function() {
                     body.push(RANGED_ATTACK);
                     body.push(MOVE);
                 }
-                console.log ('Spawning new ' + roleName + ' creep: ' + cName);
+                console.log (room +':Spawning new ' + roleName + ' creep: ' + cName);
                 return this.createCreep(body, cName, {role: roleName, flagged: false});
+            }
+
+            else if (roleName == 'harvester' || roleName == 'hauler'){
+                let numParts = Math.floor(energy/150);
+                for (let i = 0; i < numParts; i++) {
+                    body.push(CARRY);
+                    body.push(CARRY);
+                    body.push(MOVE);
+                }
+
+                console.log (this.name +':Spawning new ' + roleName + ' creep: ' + cName);
+                return this.createCreep(body, cName, {role: roleName, working: false});
             }
 
             else {
@@ -73,7 +106,7 @@ module.exports = function() {
                 for (let i = 0; i < numParts; i++) {
                     body.push(MOVE);
                 }
-                console.log ('Spawning new ' + roleName + ' creep: ' + cName);
+                console.log (this.name +':Spawning new ' + roleName + ' creep: ' + cName);
                 return this.createCreep(body, cName, {role: roleName, working: false});
             }
         }
@@ -81,7 +114,7 @@ module.exports = function() {
 
 function findUniqueSource (sources, miners) {
     if (miners == undefined) {
-        return Game.spawns.Alpha.pos.findClosestByPath(FIND_SOURCES).id
+        return spawnGame.spawns[room].room.pos.findClosestByPath(FIND_SOURCES).id
     }
     for (var source of sources) {
         for (let miner of miners) {

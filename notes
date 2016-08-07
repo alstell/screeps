@@ -4,3 +4,46 @@ global.foo = function() {
     console.log('bar');
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+RCL = 1 and 2 and low population rooms
+- Generic creeps capable of mining feeding spawn and upgrading controller and building
+    RCL 1 bodies need to be less than 300 energy
+    RCL 2 bodies need to be less than 550 energy
+    Bodies should be based on room energy capacity
+
+    RCL 1 Body : [WORK, CARRY, CARRY, MOVE, MOVE] 300 Energy
+    RCL 2 Body Ramp Up: [WORK, CARRY, CARRY, CARRY, MOVE, MOVE] 350
+                        [WORK, WORK, CARRY,CARRY, MOVE, MOVE] 400
+                        [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE] 500
+                        [WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE] 550
+
+RCL 3 and above
+- Start making specialized creeps
+- Energy available 3: 800, 4: 1300, 5: 1800, 6: 2300, 7: 5300, 8: 10300
+    Miners  - 1 miner per source
+            - Drop mines into a container
+            - Body [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE, MOVE] 650
+
+    Harvester   - Cannot do work
+            - Carries energy from miners containers to spawn, extensions, then any needy creep
+            - 1 per source
+            - Body1 [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] 600
+            - Body2 [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE] 750
+
+    Upgrader    - Can mine if the need arises
+            - Takes energy from source to controller
+            - # = INT( 1 + RCL/2) per room
+            - Body1 [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE] 600
+            - Body2 [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] 800
+
+    Builder - Can mine if the need arises
+            - Builds any requested structures
+            - Secondary role is repairer
+            - Teritary role is upgrader
+            - 1 per room
+            - Body1 [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE] 600
+            - Body2 [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE] 800
+
+    Maintainer -
+

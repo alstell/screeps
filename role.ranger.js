@@ -3,7 +3,7 @@ var roleRanger = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-        var flagName = Game.flags.Defend;
+        var flagName = Game.flags.Attack;
 
         // Move to the flag in another room
 

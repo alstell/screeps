@@ -1,4 +1,4 @@
-var roleBuilder = require('role.builder');
+var roleUpgrader = require('role.upgrader');
 
 var roleRepairer = {
 
@@ -23,6 +23,7 @@ var roleRepairer = {
         if(creep.memory.working) {
             var target = creep.pos.findClosestByPath(FIND_STRUCTURES,{
                 filter: (s) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL
+                && s.structureType != STRUCTURE_RAMPART
             });
             if (target != undefined) {
                 if (creep.repair(target) == ERR_NOT_IN_RANGE) {
@@ -30,7 +31,7 @@ var roleRepairer = {
                 }
             }
             else {
-                roleBuilder.run(creep);
+                roleUpgrader.run(creep);
             }
         }
         else {
