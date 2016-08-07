@@ -10,14 +10,15 @@ var roleMiner = {
             creep.moveTo(assignedSource.pos);
         }
 
-        var structures = creep.pos.findInRange(FIND_STRUCTURES, 0, {
+ /*       var structures = creep.pos.findInRange(FIND_STRUCTURES, 0, {
             filter: (s) => {
                 return s.structureType == STRUCTURE_CONTAINER
             }
         });
-        if (!structures) {
+        if (structures == "") {
             creep.room.createConstructionSite(creep.pos, STRUCTURE_CONTAINER);
         }
+*/
     }
 };
 

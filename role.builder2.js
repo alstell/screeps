@@ -5,12 +5,12 @@ var roleBuilder2 = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-        var droppedEnergy = creep.pos.findInRange(FIND_DROPPED_ENERGY, 5 );
+        var droppedEnergy = creep.pos.findClosestByPath(creep.pos.findInRange(FIND_DROPPED_ENERGY, 5 ));
 
         var flagName = Game.flags.Build;
 
 
-        if (droppedEnergy != undefined && creep.carry.energy < creep.carryCapacity) {
+        if (droppedEnergy != undefined && (creep.carry.energy < creep.carryCapacity)) {
             if (creep.pickup(droppedEnergy) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(droppedEnergy);
             }
@@ -44,12 +44,25 @@ var roleBuilder2 = {
                 else {
                         roleRepairer.run(creep);
                 }
-            }
+            } 
             else {
-                var source = creep.pos.findClosestByPath(FIND_SOURCES);
-            }
-            if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source);
+                var source = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: (s) => {return s.structureType == STRUCTURE_CONTAINER &&
+                            s.store[RESOURCE_ENERGY] > 0.9 * (creep.carryCapacity - _.sum(creep.carry))
+                    }
+                });
+
+                if (!source) {
+                    source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+
+                    if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(source);
+                    }
+                }
+
+                else if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(source);
+                }
             }
         }
     }

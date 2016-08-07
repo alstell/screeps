@@ -5,13 +5,7 @@ var roleBuilder = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-        var droppedEnergy = creep.pos.findInRange(FIND_DROPPED_ENERGY, 5 );
-
-        if (droppedEnergy != undefined && creep.carry.energy < creep.carryCapacity) {
-            if (creep.pickup(droppedEnergy) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(droppedEnergy);
-            }
-        }
+        // var startCpu = Game.cpu.getUsed();
 
         if(creep.memory.working && creep.carry.energy == 0) {
             creep.memory.working = false;
@@ -43,17 +37,46 @@ var roleBuilder = {
             }
         }
         else {
-            var source = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return ((structure.structureType == STRUCTURE_STORAGE && structure.store[RESOURCE_ENERGY] > 0) ||
-                    (structure.structureType == STRUCTURE_CONTAINER && structure.energy > creep.carryCapacity)||
-                    (structure.structureType == STRUCTURE_LINK && structure.energy > 0 ))
-                }
+            let droppedEnergy = creep.pos.findClosestByPath(FIND_DROPPED_ENERGY, {
+                filter: (e) => {return (e.energy > 0.25 * (creep.carryCapacity - _.sum(creep.carry)))}
             });
-            if(creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source);
+
+            if (droppedEnergy  && creep.carry.energy < creep.carryCapacity ) {
+                if (creep.pickup(droppedEnergy) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(droppedEnergy);
+                }
+            }
+            else {
+                let source = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: (s) => {
+                        return (s.structureType == STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY] > 0)
+                    }
+                });
+
+                if (!source) {
+                    source = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                        filter: (s) => {
+                            return (s.structureType == STRUCTURE_CONTAINER &&
+                            s.store[RESOURCE_ENERGY] > 0.4 * (creep.carryCapacity - _.sum(creep.carry)))
+                        }
+                    });
+                }
+
+                if (!source) {
+                    source = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                        filter: (s) => {
+                            return (s.structureType == STRUCTURE_LINK && s.energy > 0)
+                        }
+                    });
+                }
+
+                if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(source);
+                }
             }
         }
+        // var elapsed = (Game.cpu.getUsed() - startCpu).toFixed(2);
+       // console.log(creep.name + ' used ' + elapsed +' CPU time.');
     }
 };
 

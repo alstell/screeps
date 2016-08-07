@@ -21,9 +21,11 @@ var roleMelee = {
         if (creep.pos.isEqualTo(Game.flags.Attack) && !creep.memory.flagged) creep.memory.flagged = true;
 
         if (creep.memory.flagged && creep.memory.attack) {
-            var target = creep.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, {
-                filter: (s) => s.structureType == STRUCTURE_TOWER
-            });
+            var target = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS)
+
+ //           var target = creep.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, {
+ //               filter: (s) => s.structureType == STRUCTURE_TOWER
+ //           });
 
             if (!target) target = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
 
